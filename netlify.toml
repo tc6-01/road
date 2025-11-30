@@ -1,0 +1,19 @@
+[build]
+  command = "cd frontend && npm install && npm run build"
+  publish = "frontend/dist"
+
+[[redirects]]
+  from = "/data/*"
+  to = "/data/:splat"
+  status = 200
+
+[[headers]]
+  for = "/data/*"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[dev]
+  command = "cd frontend && npm run dev"
+  port = 3000
+  publish = "frontend/dist"
+

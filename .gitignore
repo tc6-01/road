@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.env
+.venv
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+.npm
+.yarn
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Images (will be tracked but large files excluded)
+frontend/public/images/*.jpg
+frontend/public/images/*.png
+frontend/public/images/*.jpeg
+!frontend/public/images/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
