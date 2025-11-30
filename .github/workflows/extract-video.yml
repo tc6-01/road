@@ -50,6 +50,19 @@ jobs:
           cd backend
           pip install -r requirements.txt
 
+      - name: Check environment variables
+        run: |
+          echo "Checking backend API keys..."
+          [ -n "$AMAP_WEB_SERVICE_KEY" ] && echo "✅ AMAP_WEB_SERVICE_KEY is set" || echo "❌ AMAP_WEB_SERVICE_KEY is not set"
+          [ -n "$QWEN_API_KEY" ] && echo "✅ QWEN_API_KEY is set" || echo "❌ QWEN_API_KEY is not set"
+          [ -n "$DEEPSEEK_API_KEY" ] && echo "✅ DEEPSEEK_API_KEY is set" || echo "❌ DEEPSEEK_API_KEY is not set"
+          [ -n "$OPENAI_API_KEY" ] && echo "✅ OPENAI_API_KEY is set" || echo "❌ OPENAI_API_KEY is not set"
+        env:
+          AMAP_WEB_SERVICE_KEY: ${{ secrets.AMAP_WEB_SERVICE_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
       - name: Run extractor
         run: |
           cd backend

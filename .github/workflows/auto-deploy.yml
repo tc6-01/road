@@ -30,9 +30,21 @@ jobs:
           cd frontend
           npm ci
 
+      - name: Check environment variables
+        run: |
+          echo "Checking VITE_AMAP_KEY..."
+          if [ -z "$VITE_AMAP_KEY" ]; then
+            echo "❌ VITE_AMAP_KEY is not set"
+          else
+            echo "✅ VITE_AMAP_KEY is set (length: ${#VITE_AMAP_KEY})"
+          fi
+        env:
+          VITE_AMAP_KEY: ${{ secrets.VITE_AMAP_KEY }}
+
       - name: Build
         run: |
           cd frontend
+          echo "Building with VITE_AMAP_KEY..."
           npm run build
         env:
           VITE_AMAP_KEY: ${{ secrets.VITE_AMAP_KEY }}
