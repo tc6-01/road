@@ -129,12 +129,15 @@ defineEmits(['select', 'close'])
 
 const searchQuery = ref('')
 
-// 过滤地点
+// 过滤地点（只显示有效的地点：有名称或城市的）
 const filteredPlaces = computed(() => {
-  if (!searchQuery.value) return props.places
+  // 首先过滤掉无效数据
+  const validPlaces = props.places.filter(place => place.name || place.city)
+  
+  if (!searchQuery.value) return validPlaces
 
   const query = searchQuery.value.toLowerCase()
-  return props.places.filter(place => {
+  return validPlaces.filter(place => {
     return (
       place.name?.toLowerCase().includes(query) ||
       place.city?.toLowerCase().includes(query) ||

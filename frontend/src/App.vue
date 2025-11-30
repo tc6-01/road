@@ -56,10 +56,21 @@ const sidebarOpen = ref(false)
 
 // 加载地点数据
 const loadPlaces = async () => {
+  console.log('开始加载地点数据...')
   try {
     const response = await fetch('/data/places.json')
+    console.log('数据响应状态:', response.status)
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    
     const data = await response.json()
+    console.log('加载到的原始数据:', data)
+    
     places.value = data.places || []
+    console.log('解析后的地点列表:', places.value)
+    console.log('地点数量:', places.value.length)
   } catch (error) {
     console.error('加载数据失败:', error)
     places.value = []

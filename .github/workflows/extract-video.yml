@@ -8,6 +8,26 @@ on:
         description: '抖音视频链接'
         required: true
         type: string
+      place_name:
+        description: '地点名称（可选，AI提取失败时使用）'
+        required: false
+        type: string
+      city:
+        description: '城市（可选，AI提取失败时使用）'
+        required: false
+        type: string
+      province:
+        description: '省份（可选，AI提取失败时使用）'
+        required: false
+        type: string
+      address:
+        description: '详细地址（可选）'
+        required: false
+        type: string
+      foods:
+        description: '美食列表（可选，JSON格式，如：[{"name":"火锅","description":"麻辣","tags":["辣"]}]）'
+        required: false
+        type: string
 
 jobs:
   extract:
@@ -32,11 +52,19 @@ jobs:
       - name: Run extractor
         run: |
           cd backend
-          python extractor.py --url "${{ github.event.inputs.video_url }}"
+          python extractor.py \
+            --url "${{ github.event.inputs.video_url }}" \
+            --non-interactive \
+            ${{ github.event.inputs.place_name && format('--place-name "{0}"', github.event.inputs.place_name) || '' }} \
+            ${{ github.event.inputs.city && format('--city "{0}"', github.event.inputs.city) || '' }} \
+            ${{ github.event.inputs.province && format('--province "{0}"', github.event.inputs.province) || '' }} \
+            ${{ github.event.inputs.address && format('--address "{0}"', github.event.inputs.address) || '' }} \
+            ${{ github.event.inputs.foods && format('--foods "{0}"', github.event.inputs.foods) || '' }}
         env:
           AMAP_WEB_SERVICE_KEY: ${{ secrets.AMAP_WEB_SERVICE_KEY }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          TIKHUB_API_KEY: ${{ secrets.TIKHUB_API_KEY }}
+          QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Commit changes
         run: |
