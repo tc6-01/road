@@ -4,8 +4,13 @@ import { resolve } from 'path'
 import { copyFileSync, mkdirSync, existsSync, watch } from 'fs'
 
 export default defineConfig(({ mode }) => {
-  // 加载环境变量
+  // 加载环境变量（优先从系统环境变量读取，兼容 GitHub Actions）
   const env = loadEnv(mode, process.cwd(), '')
+  
+  // 从系统环境变量读取（GitHub Actions 中使用）
+  const VITE_AMAP_KEY = process.env.VITE_AMAP_KEY || env.VITE_AMAP_KEY || ''
+  
+  console.log('Building with VITE_AMAP_KEY:', VITE_AMAP_KEY ? `set (length: ${VITE_AMAP_KEY.length})` : 'NOT SET')
   
   return {
     plugins: [
@@ -66,7 +71,7 @@ export default defineConfig(({ mode }) => {
     publicDir: 'public',
     // 定义全局常量替换，确保环境变量在构建时被注入
     define: {
-      'import.meta.env.VITE_AMAP_KEY': JSON.stringify(env.VITE_AMAP_KEY || '')
+      'import.meta.env.VITE_AMAP_KEY': JSON.stringify(VITE_AMAP_KEY)
     }
   }
 })
