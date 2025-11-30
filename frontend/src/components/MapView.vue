@@ -40,27 +40,55 @@ const validPlacesCount = computed(() => {
 const initMap = () => {
   if (!window.AMap) {
     console.error('⚠️ 高德地图API未加载')
-    console.error('请在 frontend/index.html 中配置你的高德地图 API Key')
+    console.error('VITE_AMAP_KEY 环境变量值:', import.meta.env.VITE_AMAP_KEY || '(未设置)')
+    console.error('可能的原因:')
+    console.error('1. 本地开发: 请在 frontend/.env 文件中配置 VITE_AMAP_KEY')
+    console.error('2. GitHub Actions: 请在 Settings > Environments > script_env 中配置 VITE_AMAP_KEY')
     console.error('获取 API Key: https://console.amap.com/')
     
     // 显示错误提示
     const container = document.getElementById('amap-container')
     if (container) {
+      const isProduction = import.meta.env.PROD
+      const envKey = import.meta.env.VITE_AMAP_KEY
+      
       container.innerHTML = `
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 40px; text-align: center; background: #f3f4f6;">
           <div style="font-size: 48px; margin-bottom: 20px;">🗺️</div>
           <h2 style="font-size: 24px; color: #1f2937; margin-bottom: 12px;">地图未配置</h2>
-          <p style="color: #6b7280; margin-bottom: 8px;">请配置高德地图 API Key</p>
-          <p style="color: #9ca3af; font-size: 14px; max-width: 500px;">
-            在 <code style="background: #fff; padding: 2px 6px; border-radius: 4px;">frontend/index.html</code> 中将 
-            <code style="background: #fff; padding: 2px 6px; border-radius: 4px;">YOUR_AMAP_KEY</code> 
-            替换为你的 API Key
-          </p>
-          <a href="https://console.amap.com/" target="_blank" style="margin-top: 20px; padding: 10px 20px; background: #ef4444; color: white; text-decoration: none; border-radius: 8px;">
+          <p style="color: #6b7280; margin-bottom: 8px;">高德地图 API Key 未设置</p>
+          
+          ${isProduction ? `
+            <div style="margin: 20px 0; padding: 16px; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 4px; max-width: 600px;">
+              <p style="color: #991b1b; font-size: 14px; text-align: left; margin-bottom: 8px;">
+                <strong>❌ 生产环境检测到问题：</strong>
+              </p>
+              <p style="color: #7f1d1d; font-size: 13px; text-align: left; line-height: 1.6;">
+                VITE_AMAP_KEY = "${envKey || '(空)'}"<br><br>
+                请确认：<br>
+                1. GitHub Secrets 已在 <strong>Environments > script_env</strong> 中配置<br>
+                2. 不要在 Repository secrets 中配置（因为使用了 environment）<br>
+                3. 重新运行 GitHub Actions 工作流
+              </p>
+            </div>
+          ` : `
+            <div style="margin: 20px 0; padding: 16px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 4px; max-width: 600px;">
+              <p style="color: #92400e; font-size: 14px; text-align: left; margin-bottom: 8px;">
+                <strong>⚠️ 本地开发环境：</strong>
+              </p>
+              <p style="color: #78350f; font-size: 13px; text-align: left; line-height: 1.6;">
+                请在 <code style="background: #fff; padding: 2px 6px; border-radius: 4px;">frontend/.env</code> 文件中配置：<br>
+                <code style="background: #fff; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-top: 8px;">VITE_AMAP_KEY=你的API密钥</code>
+              </p>
+            </div>
+          `}
+          
+          <a href="https://console.amap.com/" target="_blank" style="margin-top: 20px; padding: 10px 20px; background: #ef4444; color: white; text-decoration: none; border-radius: 8px; display: inline-block;">
             获取 API Key
           </a>
           <p style="margin-top: 20px; font-size: 14px; color: #6b7280;">
-            查看详细说明：<code style="background: #fff; padding: 2px 6px; border-radius: 4px;">frontend/SETUP.md</code>
+            查看详细说明：<code style="background: #fff; padding: 2px 6px; border-radius: 4px;">frontend/SETUP.md</code> 
+            或 <code style="background: #fff; padding: 2px 6px; border-radius: 4px;">.github/ACTIONS_SETUP.md</code>
           </p>
         </div>
       `

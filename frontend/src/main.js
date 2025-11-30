@@ -14,10 +14,18 @@ const loadAMap = () => {
     // 获取环境变量中的 API Key
     const AMAP_KEY = import.meta.env.VITE_AMAP_KEY || ''
 
+    console.log('🔍 环境变量检查:')
+    console.log('  - 环境模式:', import.meta.env.MODE)
+    console.log('  - 生产环境:', import.meta.env.PROD)
+    console.log('  - VITE_AMAP_KEY:', AMAP_KEY ? `已设置 (长度: ${AMAP_KEY.length})` : '❌ 未设置')
+
     if (!AMAP_KEY) {
       console.warn('⚠️  未配置高德地图 API Key')
-      console.warn('请在 frontend/.env 文件中配置 VITE_AMAP_KEY')
-      console.warn('或在 frontend/index.html 中手动配置')
+      if (import.meta.env.PROD) {
+        console.warn('生产环境: 请在 GitHub Secrets (Environments > script_env) 中配置 VITE_AMAP_KEY')
+      } else {
+        console.warn('开发环境: 请在 frontend/.env 文件中配置 VITE_AMAP_KEY')
+      }
       resolve(null) // 即使没有配置也继续，只是地图功能不可用
       return
     }

@@ -10,7 +10,14 @@ export default defineConfig(({ mode }) => {
   // 从系统环境变量读取（GitHub Actions 中使用）
   const VITE_AMAP_KEY = process.env.VITE_AMAP_KEY || env.VITE_AMAP_KEY || ''
   
-  console.log('Building with VITE_AMAP_KEY:', VITE_AMAP_KEY ? `set (length: ${VITE_AMAP_KEY.length})` : 'NOT SET')
+  console.log('\n' + '='.repeat(60))
+  console.log('🔧 Vite 构建配置')
+  console.log('='.repeat(60))
+  console.log('构建模式:', mode)
+  console.log('process.env.VITE_AMAP_KEY:', process.env.VITE_AMAP_KEY ? `✓ 已设置 (${process.env.VITE_AMAP_KEY.length} 字符)` : '✗ 未设置')
+  console.log('loadEnv 读取值:', env.VITE_AMAP_KEY ? `✓ 已设置 (${env.VITE_AMAP_KEY.length} 字符)` : '✗ 未设置')
+  console.log('最终使用值:', VITE_AMAP_KEY ? `✅ 已设置 (${VITE_AMAP_KEY.length} 字符)` : '❌ 未设置')
+  console.log('='.repeat(60) + '\n')
   
   return {
     plugins: [
