@@ -13,7 +13,6 @@ const loadAMap = () => {
 
     // 获取环境变量中的 API Key
     const AMAP_KEY = import.meta.env.VITE_AMAP_KEY || ''
-    const AMAP_SECURITY_CODE = import.meta.env.VITE_AMAP_SECURITY_CODE || ''
 
     if (!AMAP_KEY) {
       console.warn('⚠️  未配置高德地图 API Key')
@@ -21,13 +20,6 @@ const loadAMap = () => {
       console.warn('或在 frontend/index.html 中手动配置')
       resolve(null) // 即使没有配置也继续，只是地图功能不可用
       return
-    }
-
-    // 配置安全密钥（可选）
-    if (AMAP_SECURITY_CODE) {
-      window._AMapSecurityConfig = {
-        securityJsCode: AMAP_SECURITY_CODE
-      }
     }
 
     // 动态创建 script 标签加载高德地图
